@@ -12,6 +12,7 @@ nav:
     - Research: 
       - Latex: 'research/latex.md'
       - Softwares: 'research/softwares.md'
+      - Website: 'research/website.md'
 # theme: material
 
 
