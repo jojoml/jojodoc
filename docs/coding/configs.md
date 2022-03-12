@@ -120,6 +120,32 @@ password: 281117
 cert: false
 ```
 
+## Terminator costum color config
+overwrite ~/.config/terminator/config
+```
+[global_config]
+  title_transmit_fg_color = "#000000"
+  title_transmit_bg_color = "#bbede0"
+[keybindings]
+[profiles]
+  [[default]]
+    background_color = "#353535"
+    background_darkness = 0.95
+    background_type = transparent
+    cursor_color = "#00ff6d"
+    foreground_color = "#d3d7cf"
+    palette = "#000000:#ef2929:#8ae234:#cdcd00:#729fcf:#cd00cd:#00cdcd:#e5e5e5:#7f7f7f:#cc0000:#73d216:#ffff00:#5c5cff:#ff00ff:#00ffff:#ffffff"
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+```
+
 ## Others
 For google drive download on commmand line
 https://github.com/wkentaro/gdown
