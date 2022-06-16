@@ -9,6 +9,9 @@ nav:
         - Pytorch: 'coding/python/pytorch.md'
         - Python tips: 'coding/python/tips.md'
         - Bitter Lessons: 'coding/python/bitter_lessons.md'
+    - Cheatsheets:
+       - Slurm: coding/cheetsheets/slurm.md
+       - Git: coding/cheetsheets/git.md 
     - Research: 
       - Latex: 'research/latex.md'
       - Softwares: 'research/softwares.md'
