@@ -1,4 +1,6 @@
 ## Linux
+### Sample bashrc
+![Sample](./.bashrc)
 
 ### Setup a new device partition
 https://www.digitalocean.com/community/tutorials/how-to-partition-and-format-storage-devices-in-linux
