@@ -11,7 +11,7 @@ nav:
         - Bitter Lessons: 'coding/python/bitter_lessons.md'
     - Cheatsheets:
       - Slurm: 'coding/cheatsheets/slurm.md'
-      - Git: 'coding/cheatsheets/git.md ''
+      - Git: 'coding/cheatsheets/git.md'
     - Research: 
       - Latex: 'research/latex.md'
       - Softwares: 'research/softwares.md'
