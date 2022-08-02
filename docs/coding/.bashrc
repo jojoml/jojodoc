@@ -2,6 +2,7 @@
 alias hm='cd /home/muchenli/projects/def-lsigal/muchenli'
 alias sq='squeue -u muchenli -o "%.18i %.9P %.35j %.8u %.8T %.10M %.9l %.6D %R"'
 alias sqp='squeue -o "%.18i %.9P %.35j %.8u %.8T %.10M %.9l %.6D %R"'
+alias si='sinfo -O "NodeHost:10","StateCompact:6","CPUsState:14","Memory:7","AllocMem:9","FreeMem:9","GresUsed:55","Gres:55" -p edith'
 
 mkdir -p ~/trash_can
 function filter_txts(){
