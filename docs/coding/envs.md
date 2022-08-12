@@ -2,6 +2,17 @@
 ### Sample bashrc
 [Sample](./.bashrc)
 
+### Setup ssh config 
+```bash
+Host *
+    ControlMaster auto
+    ControlPath ~/.ssh/sockets/%r@%h-%p
+    ControlPersist 1800
+    ServerAliveInterval 60
+    ServerAliveCountMax 30
+```
+remember to mkdir ~/.ssh/sockets
+
 ### Setup a new device partition
 https://www.digitalocean.com/community/tutorials/how-to-partition-and-format-storage-devices-in-linux
 
