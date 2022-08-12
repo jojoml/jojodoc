@@ -13,6 +13,12 @@ Host *
 ```
 remember to mkdir ~/.ssh/sockets
 
+### Turning On Or Off Fn Mode In Ubuntu Linux 
+```
+echo 2 | sudo tee /sys/module/hid_apple/parameters/fnmode
+```
+https://www.hashbangcode.com/article/turning-or-fn-mode-ubuntu-linux
+
 ### Setup a new device partition
 https://www.digitalocean.com/community/tutorials/how-to-partition-and-format-storage-devices-in-linux
 
