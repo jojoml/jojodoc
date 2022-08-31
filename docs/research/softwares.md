@@ -7,3 +7,8 @@ https://free-countdown.com/
 If you are using Mendeley, you can export mendeley's paper by installing medeley version <= 1.8.
 
 Zotero has a bunch of useful plugins.
+
+## Connect to Remote Desktop with GUI
+TeamViewer
+or
+No Machine https://www.nomachine.com/
