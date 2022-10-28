@@ -73,3 +73,5 @@ It looks like this:
 % do modification by using \md{old_content}{new_content}
 \newcommand {\md}[2]{\sout{#1}{ \color{blue}#2}}
 ```
+### latex 使用 enumitem 宏包调整上下左右缩进间距，标签样式
+https://blog.csdn.net/robert_chen1988/article/details/83179571
