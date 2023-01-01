@@ -12,3 +12,10 @@ Zotero has a bunch of useful plugins.
 TeamViewer
 or
 No Machine https://www.nomachine.com/
+
+## Endnote
+### Import from plain reference txt to endnote
+
+https://zhuanlan.zhihu.com/p/468786236
+
+https://www.cnblogs.com/larissa-0464/p/14166577.html
