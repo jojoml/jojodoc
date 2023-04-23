@@ -13,6 +13,7 @@ nav:
       - Slurm: 'coding/cheatsheets/slurm.md'
       - Git: 'coding/cheatsheets/git.md'
       - Linux: 'coding/cheatsheets/linux.md'
+      - Oh-my-zsh: 'coding/cheatsheets/ohmyzsh.md'
     - Research: 
       - Latex: 'research/latex.md'
       - Softwares: 'research/softwares.md'
