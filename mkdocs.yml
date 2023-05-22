@@ -18,6 +18,7 @@ nav:
       - Latex: 'research/latex.md'
       - Softwares: 'research/softwares.md'
       - Website: 'research/website.md'
+      - Vector: 'research/vector_cluster_guide.md'
 # theme: material
 
 
