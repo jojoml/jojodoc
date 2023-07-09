@@ -34,5 +34,24 @@ https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-ins
 
 Reboot to make nvidia-smi work.
 
+Quick CheetSheet for updating Cuda
+
+**Solving issue for apt-get update**
+```bash
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/3bf863cc.pub
+sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/ /"
+sudo apt-get update
+```
+
+**Remove old one and install desired one**
+```
+sudo apt update
+sudo apt purge "nvidia-*"
+sudo apt autoremove
+sudo apt auto-clean
+sudo apt-get install cuda-11-8 
+```
 
 ### 
