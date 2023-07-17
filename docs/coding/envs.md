@@ -1,3 +1,19 @@
+## Mac Setup
+
+Disable macs key on-hold behaviour for better vscode+vim experience.
+
+Reference https://github.com/VSCodeVim/Vim#quick-example
+```
+$ defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false              # For VS Code
+$ defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false      # For VS Code Insider
+$ defaults write com.vscodium ApplePressAndHoldEnabled -bool false                      # For VS Codium
+$ defaults write com.microsoft.VSCodeExploration ApplePressAndHoldEnabled -bool false   # For VS Codium Exploration users
+$ defaults delete -g ApplePressAndHoldEnabled                                           # If necessary, reset global default
+```
+Try lastone and reboot mac.
+
+In Preference->Key board, set key repeat rate to be high and delay until repeat to be low.
+
 ## Linux
 ### Sample bashrc
 [Sample](./.bashrc)
