@@ -1,0 +1,3 @@
+- [ ] Add D2
+- [ ] Add https://github.com/Delgan/loguru usage
+- [ ] Refactor slurm script for vector
