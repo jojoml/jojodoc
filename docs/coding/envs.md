@@ -69,5 +69,7 @@ sudo apt autoremove
 sudo apt auto-clean
 sudo apt-get install cuda-11-8 
 ```
+**When boot is full**
+checkout https://askubuntu.com/questions/345588/what-is-the-safest-way-to-clean-up-boot-partition
 
 ### 
