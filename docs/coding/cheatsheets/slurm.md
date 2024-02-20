@@ -267,3 +267,8 @@ use case
 # SID=exp_name python scripts/submit.py --nodes 2 --num_gpu 4 --ntasks_per_node 1 --time_limit ...
 ```
 it will automatically detect your cluster.
+
+* This script will generate a *$SID.sh* sbatch file in *--script_dir* and then launch it. Result stored in *--log_dir*.
+* Use --repeat to split 1 job to multiple small sub jobs with dependency, tricks works on compute cananda
+
+
