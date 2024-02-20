@@ -41,36 +41,6 @@ CLUSTER_CONFIG = {
             "nodelist": None,
             "default_account": "rrg-lsigal",
         },
-    "graham":
-        {
-            "gpu_model": "p100",
-            "gpus_per_node": 2,
-            "cpu_cores_per_node": 32,
-            "threads_per_node": 64,
-            "cpu_cores_per_gpu": 16,
-            "threads_per_gpu": 32,
-            "ram_per_node": 124,
-            "ram_per_gpu": 40,
-            "job_system": "slurm",
-            "partition": None,
-            "nodelist": None,
-            "default_account": "def-lsigal",
-        },
-    "beluga":
-        {
-            "gpu_model": "v100",
-            "gpus_per_node": 4,
-            "cpu_cores_per_node": 40,
-            "threads_per_node": 80,
-            "cpu_cores_per_gpu": 10,
-            "threads_per_gpu": 20,
-            "ram_per_node": 186,
-            "ram_per_gpu": 40,
-            "job_system": "slurm",
-            "partition": None,
-            "nodelist": None,
-            "default_account": "def-lsigal",
-        },
     # "sockeye":
     #     {
     #         "gpu_model": "v100",
@@ -87,21 +57,6 @@ CLUSTER_CONFIG = {
     #         "default_account": "pr-kmyi-1",
     #         "default_gpu_account": "pr-kmyi-1-gpu",
     #     },
-    "narval":
-        {
-            "gpu_model": "a100",
-            "gpus_per_node": 4,
-            "cpu_cores_per_node": 48,
-            "threads_per_node": 96,
-            "cpu_cores_per_gpu": 12,
-            "threads_per_gpu": 24,
-            "ram_per_node": 489,
-            "ram_per_gpu": 64,
-            "job_system": "slurm",
-            "partition": None,
-            "nodelist": None,
-            "default_account": "rrg-lsigal",
-        },
     "edith":
         {
             "cpu_cores_per_gpu": 2,
@@ -122,27 +77,40 @@ CLUSTER_CONFIG = {
         }
 }
 
+# User NOTE: Add python environment init command here
 ENV_INIT_COMMAND = {
-    # "vector": "bash ~/torch.env\n"
-    #           "source activate ~/torch",
     "vector": "source ~/setup.sh\n"
               "conda activate pt\n"
               "export PYTHONPATH=./\n",
     "edith": "conda activate nni\n"
              "export GLOO_SOCKET_IFNAME='eno1'\n" # https://pytorch.org/docs/stable/distributed.html#common-environment-variables
              "export TP_SOCKET_IFNAME='eno1'",  # This is required to make sure rpc works correctly on Edith
-    "narval": "source ~/torch/bin/activate\n"
-              "export PYTHONPATH=./",
     "cedar": "source ~/torch/bin/activate\n"
-             "export PYTHONPATH=./"
+             "export PYTHONPATH=./",
 }
 
-DIST_INIT_COMMAND = "export MASTER_ADDR=$(hostname)"
+# DIST_INIT_COMMAND = "export MASTER_ADDR=$(hostname)"
 
 DATA_INIT_COMMAND = {
     "tiny-imagenet": "mkdir $SLURM_TMPDIR/tiny-imagenet\n"
     "cp ~/projects/def-lsigal/muchenli/DATASET/tiny-imagenet-200/tiny-imagenet.hdf5 $SLURM_TMPDIR/tiny-imagenet/"
 }
+
+# User NOTE: customize your commands here:
+# here I add command line exp_name to my output path
+def customize_command(commands):
+    # exp_name = os.getenv("SID", "DEFAULT")
+    # for i, c in enumerate(commands):
+    #     if c == '--config-file':
+    #         config_path = commands[i+1].split('config/', 1)[-1].rsplit('.', 1)[0]
+    # commands.append('OUTPUT_DIR')
+    # commands.append(os.path.join('.exps', config_path, exp_name))
+    return commands
+
+def customize_script(script_lines):
+    # if args.load_data == 'tiny-imagenet' and cluster in ['cedar', 'narval']:
+    #     script_lines.append(DATA_INIT_COMMAND[args.load_data])
+    return script_lines
 
 def get_slurm_script(args, cluster_name, dep_str=None):
     d = {}
@@ -176,10 +144,11 @@ def get_slurm_script(args, cluster_name, dep_str=None):
 
     # Generate script
     script_lines=["#!/bin/bash"]
-    if cluster_name == 'cedar':
-        script_lines.append(f"#SBATCH --gres=gpu:v100l:{num_gpu}")
-    else:
-        script_lines.append(f"#SBATCH --gres=gpu:{num_gpu}")
+    if num_gpu > 0:
+        if cluster_name == 'cedar':
+            script_lines.append(f"#SBATCH --gres=gpu:v100l:{num_gpu}")
+        else:
+            script_lines.append(f"#SBATCH --gres=gpu:{num_gpu}")
     for key, value in d.items():
         if value is not None:
             script_lines.append(f"#SBATCH --{key}={str(value)}")
@@ -211,8 +180,8 @@ def main(args):
             cluster = "cedar"
         elif hostname.startswith("beluga") or hostname.startswith("blg"):
             cluster = "beluga"
-        elif hostname.startswith("se"):
-            cluster = "sockeye"
+        # elif hostname.startswith("se"):
+        #     cluster = "sockeye"
         elif hostname.startswith("narval"):
             cluster = "narval"
         elif hostname.startswith("borg"):
@@ -226,20 +195,16 @@ def main(args):
 
     dep_str = None
     for i in range(args.repeat):
-        # Set time limit
+        # set time limit
         config_d, script_lines = get_slurm_script(args, cluster, dep_str)
         script_lines.append(ENV_INIT_COMMAND[cluster])
-        script_lines.append(DIST_INIT_COMMAND)
-        if args.load_data == 'tiny-imagenet' and cluster in ['cedar', 'narval']:
-            script_lines.append(DATA_INIT_COMMAND[args.load_data])
+        # script_lines.append(DIST_INIT_COMMAND)
+        script_lines = customize_script(script_lines)
+        command = customize_command(list(args.command))
 
-        exp_name = os.getenv("SID", default='test') + f'_{i}.sh'
+        exp_name = os.getenv("SID", default='test') + (f'_{i+1}.sh' if i > 0 else '.sh')
         bash_file_path = os.path.join(args.script_dir, exp_name)
-        command = list(args.command)
-        # TODO custom for current project
-        # if '--exp_name' not in command:
-        #     print("Using slurm job names")
-        #     command = command[:2] + [f'--exp_name={exp_name}'] + command[2:]
+
         with open(bash_file_path, 'w') as f:
             for line in script_lines:
                 f.write(line + '\n')
@@ -248,13 +213,16 @@ def main(args):
                 f.write(f'--mem={config_d["mem"]} ')
             f.write(' '.join(command))
             f.close()
-            # f.write(args.command)
-        #bash_file_path = os.path.abspath(bash_file_path)
-        #print(f"sbatch {bash_file_path}", os.path.exists(bash_file_path))
-        #os.system(f"sbatch {bash_file_path}")
+
+        # legacy code to run 1 job
+        # bash_file_path = os.path.abspath(bash_file_path)
+        # print(f"sbatch {bash_file_path}", os.path.exists(bash_file_path))
+        # os.system(f"sbatch {bash_file_path}")
+
+        # run command with subprocess
         slurm_res = subprocess.run(["sbatch", f"{bash_file_path}"], stdout=subprocess.PIPE)
         print(slurm_res.stdout.decode())
-        # Get job ID
+        # get job ID, potentially use it for conditional job submitting
         if slurm_res.returncode != 0:
             raise RuntimeError("Slurm/PBS error!")
         job_id = slurm_res.stdout.decode().split()[-1]
@@ -265,9 +233,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--account", type=str, default=None, help="Slurm account to use. ")
     parser.add_argument("--cluster", type=str, default=None, help="Name of the cluster.")
-    parser.add_argument("--log_dir", type=str, default="./exps/slurm_log", help="")
-    parser.add_argument("--script_dir", type=str, default="./exps/cc_scripts", help="")
-    parser.add_argument("--load_data", type=str, default="tiny-imagenet", help="")
+    parser.add_argument("--log_dir", type=str, default=".exps/slurm_log", help="")
+    parser.add_argument("--script_dir", type=str, default=".exps/cc_scripts", help="")
+    parser.add_argument("--load_data", type=str, default="", help="Some customize op to pre-load data")
     # Per job Arguments
     parser.add_argument("--num_runs", type=int, default=5, help="Number of times this shell script will be executed. This is useful when running 3 hour jobs that run multiple times.")
     parser.add_argument("--nodes", type=int, default=1)
@@ -279,7 +247,7 @@ if __name__ == "__main__":
     parser.add_argument("--partition", type=str, default=None, help="Partition to be used.")
     parser.add_argument("--nodelist", type=str, default=None, help="List of nodes to be used.")
     parser.add_argument("--exclude", type=str, default=None, help="List of nodes to be excluded.")
-    parser.add_argument("--repeat", type=int, default=1, help="Number of times to repeat the job.")
+    parser.add_argument("--repeat", type=int, default=1, help="Number of times to repeat the job, add dependency auotomatically")
 
     parser.add_argument("command", default=None, nargs=argparse.REMAINDER)
 
