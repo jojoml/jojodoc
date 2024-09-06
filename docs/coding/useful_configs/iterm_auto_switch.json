@@ -149,6 +149,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.97647064924240112
   },
+  "Triggers Use Interpolated Strings" : false,
   "Use Italic Font" : true,
   "Unlimited Scrollback" : false,
   "Keyboard Map" : {
@@ -563,7 +564,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.97647064924240112
   },
-  "Triggers Use Interpolated Strings" : true,
+  "Triggers Use Interpolated Strings" : false,
   "Use Italic Font" : true,
   "Unlimited Scrollback" : false,
   "Keyboard Map" : {
@@ -768,12 +769,6 @@
       "parameter" : "\\1@\\2",
       "regex" : ".*?([a-z0-9]+)@([\\w.]+).*",
       "partial" : true
-    },
-    {
-      "action" : "SetDirectoryTrigger",
-      "parameter" : "\\1",
-      "regex" : "\\s(~\/[^\\s]+)",
-      "partial" : true
     }
   ],
   "Ansi 0 Color" : {
@@ -973,7 +968,7 @@
     "Alpha Component" : 1,
     "Green Component" : 0.97647064924240112
   },
-  "Triggers Use Interpolated Strings" : true,
+  "Triggers Use Interpolated Strings" : false,
   "Use Italic Font" : true,
   "Unlimited Scrollback" : false,
   "Keyboard Map" : {
@@ -1184,12 +1179,6 @@
       "action" : "SetHostnameTrigger",
       "parameter" : "\\1@\\2",
       "regex" : ".*?([a-z0-9]+)@([\\w.]+).*",
-      "partial" : true
-    },
-    {
-      "action" : "SetDirectoryTrigger",
-      "parameter" : "\\1",
-      "regex" : "\\s(~\/[^\\s]+)",
       "partial" : true
     }
   ],
