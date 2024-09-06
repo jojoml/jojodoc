@@ -1,0 +1,1290 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../python/bitter_lessons/">
+      
+      
+        <link rel="next" href="../git/">
+      
+      
+      <link rel="icon" href="../../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+    
+    
+      
+        <title>Slurm - JOJO Doc</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.35f28582.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#slurm-cheat-sheet" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="JOJO Doc" class="md-header__button md-logo" aria-label="JOJO Doc" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            JOJO Doc
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Slurm
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="red" data-md-color-accent="red"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 6H7c-3.31 0-6 2.69-6 6s2.69 6 6 6h10c3.31 0 6-2.69 6-6s-2.69-6-6-6m0 10H7c-2.21 0-4-1.79-4-4s1.79-4 4-4h10c2.21 0 4 1.79 4 4s-1.79 4-4 4M7 9c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../envs/" class="md-tabs__link">
+          
+  
+    
+  
+  Coding
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+    
+  
+  Cheatsheets
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../research/latex/" class="md-tabs__link">
+          
+  
+    
+  
+  Research
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="JOJO Doc" class="md-nav__button md-logo" aria-label="JOJO Doc" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 89 89">
+  <path d="M3.136,17.387l0,42.932l42.932,21.467l-42.932,-64.399Z" />
+  <path d="M21.91,8l42.933,64.398l-18.775,9.388l-42.932,-64.399l18.774,-9.387Z" style="fill-opacity: 0.5" />
+  <path d="M67.535,17.387l-27.262,18.156l21.878,32.818l5.384,2.691l0,-53.665Z" />
+  <path d="M67.535,17.387l0,53.666l18.774,-9.388l0,-53.665l-18.774,9.387Z" style="fill-opacity: 0.25" />
+</svg>
+
+    </a>
+    JOJO Doc
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Coding
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Coding
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../envs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Envs Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../configs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Python
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Python
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/pytorch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pytorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/tips/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Python tips
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../python/bitter_lessons/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bitter Lessons
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Cheatsheets
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Cheatsheets
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Slurm
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Slurm
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#slurm-cheat-sheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Slurm Cheat Sheet
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slurm-submission-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Slurm Submission script
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../git/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Linux
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ohmyzsh/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Oh-my-zsh
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Research
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Research
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/latex/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Latex
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/softwares/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Softwares
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/website/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Website
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../research/vector_cluster_guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Vector
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#slurm-cheat-sheet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Slurm Cheat Sheet
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#slurm-submission-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      Slurm Submission script
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Slurm</h1>
+
+<h2 id="slurm-cheat-sheet">Slurm Cheat Sheet</h2>
+<p>https://slurm.schedmd.com/pdfs/summary.pdf</p>
+<pre><code class="language-bash">alias sq='squeue -u muchenli -o &quot;%.18i %.9P %.25j %.8u %.8T %.10M %.9l %.6D %R&quot;'
+alias sqp='squeue -p edith -o &quot;%.18i %.9P %.25j %.8u %.10T %.15M %.15l %5D %12R %b&quot;'
+alias si='sinfo -O &quot;NodeHost:10&quot;,&quot;StateCompact:6&quot;,&quot;CPUsState:14&quot;,&quot;Memory:7&quot;,&quot;AllocMem:9&quot;,&quot;FreeMem:9&quot;,&quot;GresUsed:55&quot;,&quot;Gres:55&quot; -p edith'
+</code></pre>
+<h2 id="slurm-submission-script">Slurm Submission script</h2>
+<p>Submission script for computecananda, vector, and Leon's server.
+Runing this script will automatically generate sbatch submission file and submit the job to slurm system.</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+# by muchenli
+# modified from https://github.com/ubc-vision/compute-canada-goodies/blob/master/python/queue_cc.py
+
+import argparse
+import getpass
+import os
+import shutil
+import time
+import socket
+import subprocess
+import datetime
+
+CLUSTER_CONFIG = {
+    &quot;cedar&quot;:
+        {
+            &quot;gpu_model&quot;: &quot;v100l&quot;,
+            &quot;gpus_per_node&quot;: 4,
+            &quot;cpu_cores_per_node&quot;: 24,
+            &quot;threads_per_node&quot;: 48,
+            &quot;cpu_cores_per_gpu&quot;: 6,
+            &quot;threads_per_gpu&quot;: 12,
+            &quot;ram_per_node&quot;: 120,
+            &quot;ram_per_gpu&quot;: 24,
+            &quot;job_system&quot;: &quot;slurm&quot;,
+            &quot;partition&quot;: None,
+            &quot;nodelist&quot;: None,
+            &quot;default_account&quot;: &quot;rrg-lsigal&quot;,
+        },
+    # &quot;sockeye&quot;:
+    #     {
+    #         &quot;gpu_model&quot;: &quot;v100&quot;,
+    #         &quot;gpus_per_node&quot;: 4,
+    #         &quot;cpu_cores_per_node&quot;: 24,
+    #         &quot;threads_per_node&quot;: None,
+    #         &quot;cpu_cores_per_gpu&quot;: 6,
+    #         &quot;threads_per_gpu&quot;: None,
+    #         &quot;ram_per_node&quot;: 191000,
+    #         &quot;ram_per_gpu&quot;: 47750,
+    #         &quot;job_system&quot;: &quot;PBS&quot;,
+    #         &quot;partition&quot;: None,
+    #         &quot;nodelist&quot;: None,
+    #         &quot;default_account&quot;: &quot;pr-kmyi-1&quot;,
+    #         &quot;default_gpu_account&quot;: &quot;pr-kmyi-1-gpu&quot;,
+    #     },
+    &quot;edith&quot;:
+        {
+            &quot;cpu_cores_per_gpu&quot;: 2,
+            &quot;ram_per_gpu&quot;: 8,
+            &quot;job_system&quot;: &quot;slurm&quot;,
+            &quot;partition&quot;: &quot;edith&quot;,
+            &quot;nodelist&quot;: None,
+            &quot;default_account&quot;: None
+        },
+    &quot;vector&quot;:
+        {
+            &quot;cpu_cores_per_gpu&quot;: 8,
+            &quot;ram_per_gpu&quot;: 40,
+            &quot;job_system&quot;: &quot;slurm&quot;,
+            &quot;partition&quot;: &quot;a40&quot;,
+            &quot;nodelist&quot;: None,
+            &quot;default_account&quot;: None
+        }
+}
+
+# User NOTE: Add python environment init command here
+ENV_INIT_COMMAND = {
+    &quot;vector&quot;: &quot;source ~/setup.sh\n&quot;
+              &quot;conda activate pt\n&quot;
+              &quot;export PYTHONPATH=./\n&quot;,
+    &quot;edith&quot;: &quot;conda activate nni\n&quot;
+             &quot;export GLOO_SOCKET_IFNAME='eno1'\n&quot; # https://pytorch.org/docs/stable/distributed.html#common-environment-variables
+             &quot;export TP_SOCKET_IFNAME='eno1'&quot;,  # This is required to make sure rpc works correctly on Edith
+    &quot;cedar&quot;: &quot;source ~/torch/bin/activate\n&quot;
+             &quot;export PYTHONPATH=./&quot;,
+}
+
+# DIST_INIT_COMMAND = &quot;export MASTER_ADDR=$(hostname)&quot;
+
+DATA_INIT_COMMAND = {
+    &quot;tiny-imagenet&quot;: &quot;mkdir $SLURM_TMPDIR/tiny-imagenet\n&quot;
+    &quot;cp ~/projects/def-lsigal/muchenli/DATASET/tiny-imagenet-200/tiny-imagenet.hdf5 $SLURM_TMPDIR/tiny-imagenet/&quot;
+}
+
+# User NOTE: customize your commands here:
+# here I add command line exp_name to my output path
+def customize_command(commands):
+    # exp_name = os.getenv(&quot;SID&quot;, &quot;DEFAULT&quot;)
+    # for i, c in enumerate(commands):
+    #     if c == '--config-file':
+    #         config_path = commands[i+1].split('config/', 1)[-1].rsplit('.', 1)[0]
+    # commands.append('OUTPUT_DIR')
+    # commands.append(os.path.join('.exps', config_path, exp_name))
+    return commands
+
+def customize_script(script_lines):
+    # if args.load_data == 'tiny-imagenet' and cluster in ['cedar', 'narval']:
+    #     script_lines.append(DATA_INIT_COMMAND[args.load_data])
+    return script_lines
+
+def get_slurm_script(args, cluster_name, dep_str=None):
+    d = {}
+    default_cfg = CLUSTER_CONFIG[cluster_name]
+
+    num_gpu = args.num_gpu
+    # Set options which could be None
+    d[&quot;account&quot;] = default_cfg[&quot;default_account&quot;] if args.account is None else args.account
+    d[&quot;partition&quot;] = default_cfg[&quot;partition&quot;] if args.partition is None else args.partition
+    d[&quot;nodelist&quot;] = default_cfg[&quot;nodelist&quot;] if args.nodelist is None else args.nodelist
+    # Set options or automatically infer CPU and MEM
+    num_cpu = default_cfg[&quot;cpu_cores_per_gpu&quot;] * num_gpu if args.num_cpu &lt; 0 else args.num_cpu
+    d[&quot;cpus-per-task&quot;] = max(num_cpu // args.ntasks_per_node, 1)
+    mem = default_cfg[&quot;ram_per_gpu&quot;] * num_gpu if args.mem &lt; 0 else args.mem        
+    d[&quot;mem&quot;] = str(max(mem, default_cfg[&quot;ram_per_gpu&quot;]))+'G'
+    # Set universal needed options
+    d[&quot;nodes&quot;] = args.nodes
+    d[&quot;ntasks-per-node&quot;] = args.ntasks_per_node
+    d[&quot;time&quot;] = args.time_limit
+    d[&quot;output&quot;] = f&quot;{args.log_dir}/{time.strftime('%m%d')}_%x_%j.out&quot;
+    d[&quot;mail-user&quot;] = &quot;jojo23333.code@gmail.com&quot;
+    d[&quot;mail-type&quot;] = &quot;BEGIN,FAIL&quot;
+    d[&quot;export&quot;] = &quot;ALL&quot;
+
+    if cluster_name == 'vector':
+        d[&quot;qos&quot;] = &quot;normal&quot;
+        # d[&quot;qos&quot;] = &quot;deadline&quot;
+        # d[&quot;account&quot;] = &quot;deadline&quot;
+        if num_gpu == 1 and args.nodes == 1:
+            d['partition'] = 'rtx6000'
+
+    # Generate script
+    script_lines=[&quot;#!/bin/bash&quot;]
+    if num_gpu &gt; 0:
+        if cluster_name == 'cedar':
+            script_lines.append(f&quot;#SBATCH --gres=gpu:v100l:{num_gpu}&quot;)
+        else:
+            script_lines.append(f&quot;#SBATCH --gres=gpu:{num_gpu}&quot;)
+    for key, value in d.items():
+        if value is not None:
+            script_lines.append(f&quot;#SBATCH --{key}={str(value)}&quot;)
+    # if run with dependency
+    if dep_str is not None:
+        script_lines.append(f&quot;#SBATCH --dependency=afterany:{dep_str}&quot;)
+    if args.exclude is not None:
+        script_lines.append(f&quot;#SBATCH --exclude={args.exclude}&quot;)
+    script_lines.append(&quot;&quot;)
+    return d, script_lines
+
+
+def main(args):
+    if not os.path.exists(args.log_dir):
+        os.makedirs(args.log_dir)
+
+    if not os.path.exists(args.script_dir):
+        os.makedirs(args.script_dir)
+
+    # Get hostname and user name
+    username = getpass.getuser()
+    hostname = socket.gethostname()
+
+    # Identify cluster
+    if config.cluster is None:
+        if hostname.startswith(&quot;gra&quot;):
+            cluster = &quot;graham&quot;
+        elif hostname.startswith(&quot;cedar&quot;) or hostname.startswith(&quot;cdr&quot;):
+            cluster = &quot;cedar&quot;
+        elif hostname.startswith(&quot;beluga&quot;) or hostname.startswith(&quot;blg&quot;):
+            cluster = &quot;beluga&quot;
+        # elif hostname.startswith(&quot;se&quot;):
+        #     cluster = &quot;sockeye&quot;
+        elif hostname.startswith(&quot;narval&quot;):
+            cluster = &quot;narval&quot;
+        elif hostname.startswith(&quot;borg&quot;):
+            cluster = &quot;edith&quot;
+        elif hostname.startswith(&quot;vremote&quot;):
+            cluster = &quot;vector&quot;
+        else:
+            raise ValueError(&quot;Unknown cluster {}&quot;.format(hostname))
+    else:
+        cluster = config.cluster
+
+    dep_str = None
+    for i in range(args.repeat):
+        # set time limit
+        config_d, script_lines = get_slurm_script(args, cluster, dep_str)
+        script_lines.append(ENV_INIT_COMMAND[cluster])
+        # script_lines.append(DIST_INIT_COMMAND)
+        script_lines = customize_script(script_lines)
+        command = customize_command(list(args.command))
+
+        exp_name = os.getenv(&quot;SID&quot;, default='test') + (f'_{i+1}.sh' if i &gt; 0 else '.sh')
+        bash_file_path = os.path.join(args.script_dir, exp_name)
+
+        with open(bash_file_path, 'w') as f:
+            for line in script_lines:
+                f.write(line + '\n')
+            f.write('srun ')
+            if cluster == 'vector':
+                f.write(f'--mem={config_d[&quot;mem&quot;]} ')
+            f.write(' '.join(command))
+            f.close()
+
+        # legacy code to run 1 job
+        # bash_file_path = os.path.abspath(bash_file_path)
+        # print(f&quot;sbatch {bash_file_path}&quot;, os.path.exists(bash_file_path))
+        # os.system(f&quot;sbatch {bash_file_path}&quot;)
+
+        # run command with subprocess
+        slurm_res = subprocess.run([&quot;sbatch&quot;, f&quot;{bash_file_path}&quot;], stdout=subprocess.PIPE)
+        print(slurm_res.stdout.decode())
+        # get job ID, potentially use it for conditional job submitting
+        if slurm_res.returncode != 0:
+            raise RuntimeError(&quot;Slurm/PBS error!&quot;)
+        job_id = slurm_res.stdout.decode().split()[-1]
+        dep_str = str(job_id)
+
+
+if __name__ == &quot;__main__&quot;:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(&quot;--account&quot;, type=str, default=None, help=&quot;Slurm account to use. &quot;)
+    parser.add_argument(&quot;--cluster&quot;, type=str, default=None, help=&quot;Name of the cluster.&quot;)
+    parser.add_argument(&quot;--log_dir&quot;, type=str, default=&quot;.exps/slurm_log&quot;, help=&quot;&quot;)
+    parser.add_argument(&quot;--script_dir&quot;, type=str, default=&quot;.exps/cc_scripts&quot;, help=&quot;&quot;)
+    parser.add_argument(&quot;--load_data&quot;, type=str, default=&quot;&quot;, help=&quot;Some customize op to pre-load data&quot;)
+    # Per job Arguments
+    parser.add_argument(&quot;--num_runs&quot;, type=int, default=5, help=&quot;Number of times this shell script will be executed. This is useful when running 3 hour jobs that run multiple times.&quot;)
+    parser.add_argument(&quot;--nodes&quot;, type=int, default=1)
+    parser.add_argument(&quot;--ntasks_per_node&quot;, type=int, default=1)
+    parser.add_argument(&quot;--num_gpu&quot;, type=int, default=1, help=&quot;Number of GPUs Per Node. Set zero to not use the gpu node.&quot;)
+    parser.add_argument(&quot;--num_cpu&quot;, type=int, default=-1, help=&quot;Number of CPU cores to use. Set -1 for auto inference.&quot;)
+    parser.add_argument(&quot;--mem&quot;, type=int, default=-1, help=&quot;Amount of memory to use. See compute canada wiki. Typically, &lt;= 8G per CPU core. Set -1 for auto inference.&quot;)
+    parser.add_argument(&quot;--time_limit&quot;, type=str, default=&quot;02-23:59&quot;, help=&quot;Time limit on the jobs.  Day-time-minutes&quot;)
+    parser.add_argument(&quot;--partition&quot;, type=str, default=None, help=&quot;Partition to be used.&quot;)
+    parser.add_argument(&quot;--nodelist&quot;, type=str, default=None, help=&quot;List of nodes to be used.&quot;)
+    parser.add_argument(&quot;--exclude&quot;, type=str, default=None, help=&quot;List of nodes to be excluded.&quot;)
+    parser.add_argument(&quot;--repeat&quot;, type=int, default=1, help=&quot;Number of times to repeat the job, add dependency auotomatically&quot;)
+
+    parser.add_argument(&quot;command&quot;, default=None, nargs=argparse.REMAINDER)
+
+    config, unparsed = parser.parse_known_args()
+    assert config.command is not None
+    # If we have unparsed arguments, print usage and exit
+    if len(unparsed) &gt; 0:
+        parser.print_usage()()
+        exit(1)
+
+    main(config)
+</code></pre>
+<p>use case</p>
+<pre><code class="language-bash"># SID=exp_name python scripts/submit.py --nodes 2 --num_gpu 4 --ntasks_per_node 1 --time_limit ...
+</code></pre>
+<p>it will automatically detect your cluster.</p>
+<ul>
+<li>This script will generate a <em>$SID.sh</em> sbatch file in <em>--script_dir</em> and then launch it. Result stored in <em>--log_dir</em>.</li>
+<li>Use --repeat to split 1 job to multiple small sub jobs with dependency, tricks works on compute cananda</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.annotate", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest"], "search": "../../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
+</html>
